@@ -101,8 +101,30 @@ metadata  {
         input 'cityName', 'text', title: 'Override default city name?', required:false, defaultValue:null
         input 'units', 'enum', title:'Select Units', required:true, defaultValue:5, options:['m':'Metric', 'f':'Fahrenheit', 's': 'Scientific']
         input 'dashClock', 'bool', title:'Flash time every 2 seconds?', required:true, defaultValue:false
-        input 'pollEvery', 'enum', title:'Poll Weatherstack how frequently?', required:true, defaultValue:60, options:[5:'5 minutes', 10:'10 minutes', 15:'15 minutes', 30:'30 minutes', 60:'60 minutes']
-        input 'luxEvery', 'enum', title:'Publish illuminance how frequently?', required:true, defaultValue:5, options:[5:'5 minutes', 10:'10 minutes', 15:'15 minutes', 30:'30 minutes']
+        input(
+            'pollEvery', 'enum',
+            title:'Poll Weatherstack how frequently?',
+            required:true,
+            defaultValue:'0 0 0 ? * * *',
+            options:['* */5 * ? * * *':'5 minutes',
+                    '* */10 * ? * * *':'10 minutes',
+                    '* */15 * ? * * *': '15 minutes',
+                    '* */30* ? * * *':'30 minutes',
+                    '0 0 0 ? * * *':'1 Hour'
+                    ]
+        )
+        input(
+            'luxEvery', 'enum',
+            title:'Publish illuminance how frequently?',
+            required:true,
+            defaultValue:'* */5 * ? * * *',
+            options:['* */5 * ? * * *':'5 minutes',
+                    '* */10 * ? * * *':'10 minutes',
+                    '* */15 * ? * * *': '15 minutes',
+                    '* */30* ? * * *':'30 minutes',
+                    '0 0 0 ? * * *':'1 Hour'
+                    ]
+        )
         //logging message config
         input name: 'debugLogging', type: 'bool', title: 'Enable debug message logging', description: '', defaultValue: false
     }
@@ -140,8 +162,8 @@ void updated() {
     state.localDate = null
     state.clockSeconds = true
     poll()
-    "runEvery${pollEvery}Minutes"(poll)
-    "runEvery${luxEvery}Minutes"(updateLux)
+    schedule(pollEvery, poll)
+    schedule(luxEvery, updateLux)
     if (dashClock) {
         updateClock()
     }
