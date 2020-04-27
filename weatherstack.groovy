@@ -106,11 +106,11 @@ metadata  {
             title:'Poll Weatherstack how frequently?',
             required:true,
             defaultValue:'0 0 0 ? * * *',
-            options:['* */5 * ? * * *':'5 minutes',
-                    '* */10 * ? * * *':'10 minutes',
-                    '* */15 * ? * * *': '15 minutes',
-                    '* */30* ? * * *':'30 minutes',
-                    '0 0 0 ? * * *':'1 Hour'
+            options:['0 */5 * ? * * *':'5 minutes',
+                     '0 */10 * ? * * *':'10 minutes',
+                     '0 */15 * ? * * *': '15 minutes',
+                     '0 */30* ? * * *':'30 minutes',
+                     '0 0 0 ? * * *':'1 Hour'
                     ]
         )
         input(
@@ -118,12 +118,12 @@ metadata  {
             title:'Publish illuminance how frequently?',
             required:true,
             defaultValue:'* */5 * ? * * *',
-            options:['* */5 * ? * * *':'5 minutes',
-                    '* */10 * ? * * *':'10 minutes',
-                    '* */15 * ? * * *': '15 minutes',
-                    '* */30* ? * * *':'30 minutes',
-                    '0 0 0 ? * * *':'1 Hour'
-                    ]
+            options:['0 */5 * ? * * *':'5 minutes',
+                     '0 */10 * ? * * *':'10 minutes',
+                     '0 */15 * ? * * *': '15 minutes',
+                     '0 */30* ? * * *':'30 minutes',
+                     '0 0 0 ? * * *':'1 Hour'
+                     ]
         )
         //logging message config
         input name: 'debugLogging', type: 'bool', title: 'Enable debug message logging', description: '', defaultValue: false
