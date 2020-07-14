@@ -33,10 +33,12 @@
 ***********************************************************************************************************************/
 
 public static String version() {
-    return 'v1.0.0'
+    return 'v1.0.1'
 }
 
 /***********************************************************************************************************************
+* Version: 1.0.1
+*   07/09/2020: Fix broken estimateLux.
 * Version: 1.0.0
 *   04/15/2020: initial release.
 */
@@ -318,23 +320,23 @@ private estimateLux(localTime, sunriseTime, sunsetTime, noonTime, twilight_begin
     if (timeOfDayIsBetween(sunriseTime, noonTime, localTime, tZ))      {
         displayDebugLog('between sunrise and noon')
         l = (((localTime.getTime() - sunriseTime.getTime()) * 10000f) / (noonTime.getTime() - sunriseTime.getTime()))
-        lux = (l < 50f ? 50L : l.trunc(0) as long)
+        lux = (l < 50f ? 50L : l as long)
     }
     else if (timeOfDayIsBetween(noonTime, sunsetTime, localTime, tZ))      {
         displayDebugLog('between noon and sunset')
         l = (((sunsetTime.getTime() - localTime.getTime()) * 10000f) / (sunsetTime.getTime() - noonTime.getTime()))
-        lux = (l < 50f ? 50L : l.trunc(0) as long)
+        lux = (l < 50f ? 50L : l as long)
     }
     else if (timeOfDayIsBetween(twilight_begin, sunriseTime, localTime, tZ))      {
         displayDebugLog('between sunrise and twilight')
         l = (((localTime.getTime() - twilight_begin.getTime()) * 50f) /
                (sunriseTime.getTime() - twilight_begin.getTime()))
-        lux = (l < 10f ? 10L : l.trunc(0) as long)
+        lux = (l < 10f ? 10L : l as long)
     }
     else if (timeOfDayIsBetween(sunsetTime, twilight_end, localTime, tZ))      {
         displayDebugLog('between sunset and twilight')
         l = (((twilight_end.getTime() - localTime.getTime()) * 50f) / (twilight_end.getTime() - sunsetTime.getTime()))
-        lux = (l < 10f ? 10L : l.trunc(0) as long)
+        lux = (l < 10f ? 10L : l as long)
     }
     else if (!timeOfDayIsBetween(twilight_begin, twilight_end, localTime, tZ))      {
         displayDebugLog('between non-twilight')
