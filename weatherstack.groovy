@@ -111,7 +111,7 @@ metadata  {
             options:['0 */5 * ? * * *':'5 minutes',
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
-                     '0 */30* ? * * *':'30 minutes',
+                     '0 */30 * ? * * *':'30 minutes',
                      '0 0 0 ? * * *':'1 Hour'
                     ]
         )
@@ -123,7 +123,7 @@ metadata  {
             options:['0 */5 * ? * * *':'5 minutes',
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
-                     '0 */30* ? * * *':'30 minutes',
+                     '0 */30 * ? * * *':'30 minutes',
                      '0 0 0 ? * * *':'1 Hour'
                      ]
         )
