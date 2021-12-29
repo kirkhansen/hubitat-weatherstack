@@ -112,7 +112,7 @@ metadata  {
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
                      '0 */30 * ? * * *':'30 minutes',
-                     '0 0 0 ? * * *':'1 Hour'
+                     '0 0 * ? * * *':'1 Hour'
                     ]
         )
         input(
@@ -124,7 +124,7 @@ metadata  {
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
                      '0 */30 * ? * * *':'30 minutes',
-                     '0 0 0 ? * * *':'1 Hour'
+                     '0 0 * ? * * *':'1 Hour'
                      ]
         )
         //logging message config
