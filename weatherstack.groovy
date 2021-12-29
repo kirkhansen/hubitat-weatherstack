@@ -1,5 +1,5 @@
 /***********************************************************************************************************************
-*  Copyright 2020 kirkhansen
+*  Copyright 2021 kirkhansen
 *
 *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
 *  in compliance with the License. You may obtain a copy of the License at:
@@ -14,7 +14,7 @@
 *
 *  Author: kirkhansen
 *
-*  Date: 2020-04-15
+*  Date: 2021-12-28
 *
 *  attribution: weather data courtesy: http://weatherstack.com
 *
@@ -33,10 +33,12 @@
 ***********************************************************************************************************************/
 
 public static String version() {
-    return 'v1.0.1'
+    return 'v1.0.2'
 }
 
 /***********************************************************************************************************************
+* Version: 1.0.2
+*   12/28/2021: Fix cron strings for every hour and every 30 minutes
 * Version: 1.0.1
 *   07/09/2020: Fix broken estimateLux.
 * Version: 1.0.0
