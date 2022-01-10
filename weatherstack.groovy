@@ -109,7 +109,7 @@ metadata  {
             'pollEvery', 'enum',
             title:'Poll Weatherstack how frequently?',
             required:true,
-            defaultValue:'0 0 0 ? * * *',
+            defaultValue:'0 0 */4 ? * * *',
             options:['0 */5 * ? * * *':'5 minutes',
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
