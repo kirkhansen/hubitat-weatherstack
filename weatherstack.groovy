@@ -33,10 +33,12 @@
 ***********************************************************************************************************************/
 
 public static String version() {
-    return 'v1.0.2'
+    return 'v1.0.3'
 }
 
 /***********************************************************************************************************************
+* Version: 1.0.3
+*   08/03/2022: Add cron string for every 6 hours. Use http for sunrise-sunset to avoid https cert failures.
 * Version: 1.0.2
 *   12/28/2021: Fix cron strings for every hour and every 30 minutes
 * Version: 1.0.1
@@ -115,7 +117,8 @@ metadata  {
                      '0 */15 * ? * * *': '15 minutes',
                      '0 */30 * ? * * *':'30 minutes',
                      '0 0 * ? * * *':'1 Hour',
-                     '0 0 */4 ? * * *':'4 hours'
+                     '0 0 */4 ? * * *':'4 hours',
+                     '0 0 */6 ? * * *':'6 hours',
                     ]
         )
         input(
@@ -127,7 +130,9 @@ metadata  {
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
                      '0 */30 * ? * * *':'30 minutes',
-                     '0 0 * ? * * *':'1 Hour'
+                     '0 0 * ? * * *':'1 Hour',
+                     '0 0 */4 ? * * *':'4 hours',
+                     '0 0 */6 ? * * *':'6 hours',
                      ]
         )
         //logging message config
@@ -264,8 +269,7 @@ private Map getObservation() {
             if (resp?.data) {
                 displayDebugLog('getObservation returned data')
                 obs = resp.data
-            }
-            else {
+            } else {
                 log.error("weatherstack api did not return data: $resp")
             }
         }
@@ -276,14 +280,22 @@ private Map getObservation() {
 }
 
 private Map getSunriseAndSunset(latitude, longitude, forDate) {
-    String uri = "https://api.sunrise-sunset.org/json?lat=$latitude&lng=$longitude&date=$forDate&formatted=0"
+    String uri = "http://api.sunrise-sunset.org/json?lat=$latitude&lng=$longitude&date=$forDate&formatted=0"
     Map sunriseAndSunset = [:]
-    httpGet(uri) { resp ->
-        sunriseAndSunset = resp.data
+    try {
+        httpGet(uri) { resp ->
+            if (resp?.data) {
+                displayDebugLog('getSunriseAndSunset returned data')
+                sunriseAndSunset = resp.data
+            } else {
+              log.error("api.sunrise-sunset.org did not return data: $resp")
+            }
+        }
+    } catch (e) {
+        log.error("http call failed for sunrise-sunset.org api: $e")
     }
-    displayDebugLog("$sunriseAndSunset")
     return sunriseAndSunset
-    }
+}
 
 def updateLux() {
     if (!state.sunriseTime
