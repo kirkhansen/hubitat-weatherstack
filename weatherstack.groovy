@@ -1,5 +1,5 @@
 /***********************************************************************************************************************
-*  Copyright 2020 kirkhansen
+*  Copyright 2021 kirkhansen
 *
 *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
 *  in compliance with the License. You may obtain a copy of the License at:
@@ -14,7 +14,7 @@
 *
 *  Author: kirkhansen
 *
-*  Date: 2020-04-15
+*  Date: 2021-12-28
 *
 *  attribution: weather data courtesy: http://weatherstack.com
 *
@@ -33,10 +33,14 @@
 ***********************************************************************************************************************/
 
 public static String version() {
-    return 'v1.0.1'
+    return 'v1.0.3'
 }
 
 /***********************************************************************************************************************
+* Version: 1.0.3
+*   08/03/2022: Add cron string for every 6 hours. Use http for sunrise-sunset to avoid https cert failures.
+* Version: 1.0.2
+*   12/28/2021: Fix cron strings for every hour and every 30 minutes
 * Version: 1.0.1
 *   07/09/2020: Fix broken estimateLux.
 * Version: 1.0.0
@@ -107,12 +111,14 @@ metadata  {
             'pollEvery', 'enum',
             title:'Poll Weatherstack how frequently?',
             required:true,
-            defaultValue:'0 0 0 ? * * *',
+            defaultValue:'0 0 */4 ? * * *',
             options:['0 */5 * ? * * *':'5 minutes',
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
-                     '0 */30* ? * * *':'30 minutes',
-                     '0 0 0 ? * * *':'1 Hour'
+                     '0 */30 * ? * * *':'30 minutes',
+                     '0 0 * ? * * *':'1 Hour',
+                     '0 0 */4 ? * * *':'4 hours',
+                     '0 0 */6 ? * * *':'6 hours',
                     ]
         )
         input(
@@ -123,8 +129,10 @@ metadata  {
             options:['0 */5 * ? * * *':'5 minutes',
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
-                     '0 */30* ? * * *':'30 minutes',
-                     '0 0 0 ? * * *':'1 Hour'
+                     '0 */30 * ? * * *':'30 minutes',
+                     '0 0 * ? * * *':'1 Hour',
+                     '0 0 */4 ? * * *':'4 hours',
+                     '0 0 */6 ? * * *':'6 hours',
                      ]
         )
         //logging message config
@@ -261,8 +269,7 @@ private Map getObservation() {
             if (resp?.data) {
                 displayDebugLog('getObservation returned data')
                 obs = resp.data
-            }
-            else {
+            } else {
                 log.error("weatherstack api did not return data: $resp")
             }
         }
@@ -273,14 +280,22 @@ private Map getObservation() {
 }
 
 private Map getSunriseAndSunset(latitude, longitude, forDate) {
-    String uri = "https://api.sunrise-sunset.org/json?lat=$latitude&lng=$longitude&date=$forDate&formatted=0"
+    String uri = "http://api.sunrise-sunset.org/json?lat=$latitude&lng=$longitude&date=$forDate&formatted=0"
     Map sunriseAndSunset = [:]
-    httpGet(uri) { resp ->
-        sunriseAndSunset = resp.data
+    try {
+        httpGet(uri) { resp ->
+            if (resp?.data) {
+                displayDebugLog('getSunriseAndSunset returned data')
+                sunriseAndSunset = resp.data
+            } else {
+              log.error("api.sunrise-sunset.org did not return data: $resp")
+            }
+        }
+    } catch (e) {
+        log.error("http call failed for sunrise-sunset.org api: $e")
     }
-    displayDebugLog("$sunriseAndSunset")
     return sunriseAndSunset
-    }
+}
 
 def updateLux() {
     if (!state.sunriseTime
