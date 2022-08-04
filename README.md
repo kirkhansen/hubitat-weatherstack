@@ -13,4 +13,4 @@ This was largely ported from [DarkSky.net-WeatherDriver](https://github.com/Hubi
 5. Profit
 
 ## Note
-With the free version, stick with the default of polling every hour as this should keep you under the allowed number of API calls.
+With the free version, stick with the default of polling 4 every hours as this should keep you under the allowed number of API calls.
