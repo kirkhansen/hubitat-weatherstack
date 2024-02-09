@@ -33,10 +33,12 @@
 ***********************************************************************************************************************/
 
 public static String version() {
-    return 'v1.0.3'
+    return 'v1.0.4'
 }
 
 /***********************************************************************************************************************
+* Version: 1.0.4
+*   02/08/2024: Add cron string for every 8 hours. Weatherstack free API is limiting to 100 queries per month.
 * Version: 1.0.3
 *   08/03/2022: Add cron string for every 6 hours. Use http for sunrise-sunset to avoid https cert failures.
 * Version: 1.0.2
@@ -111,7 +113,7 @@ metadata  {
             'pollEvery', 'enum',
             title:'Poll Weatherstack how frequently?',
             required:true,
-            defaultValue:'0 0 */4 ? * * *',
+            defaultValue:'0 0 */8 ? * * *',
             options:['0 */5 * ? * * *':'5 minutes',
                      '0 */10 * ? * * *':'10 minutes',
                      '0 */15 * ? * * *': '15 minutes',
@@ -119,6 +121,7 @@ metadata  {
                      '0 0 * ? * * *':'1 Hour',
                      '0 0 */4 ? * * *':'4 hours',
                      '0 0 */6 ? * * *':'6 hours',
+                     '0 0 */8 ? * * *':'8 hours',
                     ]
         )
         input(
